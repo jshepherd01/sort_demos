@@ -1,6 +1,4 @@
-# globals
-from abc import abstractclassmethod
-
+import subprocess
 
 ANSIcolours = {
     "r": "\u001b[31m",
@@ -39,4 +37,9 @@ def prettyList(alist, colourslist):
 
 def errorText(astring):
     out = ANSIcolours['r'] + "!!! " + astring + " !!!" + ANSIcolours['reset']
+    return out
+
+def bannerText(astring, achar):
+    _, columns = subprocess.check_output(['stty', 'size']).split()
+    out = '{s:{c}^{n}}'.format(s=astring,n=int(columns),c=achar)
     return out
