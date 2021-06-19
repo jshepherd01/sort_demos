@@ -25,12 +25,13 @@ def rainbowString(astring):
     return out
 
 def prettyList(alist, colourslist):
+    width = len(str(max(alist)))
     out = "["
     for i in range(len(alist)):
         if len(colourslist) > i and colourslist[i] is not None:
-            out += colourString(str(alist[i]), colourslist[i])
+            out += colourString(str(alist[i]).rjust(width), colourslist[i])
         else:
-            out += str(alist[i])
+            out += str(alist[i]).rjust(width)
         out += ', '
     out = out[:-2]
     out += "]"
