@@ -13,7 +13,7 @@ from random import shuffle, randint
 # Selection Sort
 
 def selectionInit(alist):
-    print(bannerText(' SELECTION SORT ', '#'))
+    print(bannerText('SELECTION SORT', '#'))
     print("Performing selection sort on list:")
     print(prettyList(alist, []))
     global state
@@ -63,7 +63,7 @@ def selectionOuter(alg, alist, i, j, k, code, timer):
         state['code'] = 1
 
 def selectionEnd(alg, alist, i, j, k, code, timer):
-    print(bannerText(" FINISHED ", '#'))
+    print(bannerText("FINISHED", '#'))
     print("...after",timer,"comparisons")
     print(prettyList(alist,['c']*len(alist)))
     global state
@@ -83,6 +83,76 @@ def selectionDisplay(alg, alist, i, j, k, code, timer):
     print(prettyList(alist, coloursList))
 
 # Insertion Sort
+
+def insertionInit(alist):
+    print(bannerText('INSERTION SORT', '#'))
+    print("Performing insertion sort on list:")
+    print(prettyList(alist, []))
+    if len(alist) == 1:
+        code = 0
+    else:
+        code = 1
+    global state
+    state = {
+        "alg": "ins",
+        "alist": alist,
+        "i": 1,
+        "j": 1,
+        "code": code,
+        "timer": 0,
+    }
+    print("(s)tep for inner loop.")
+    print("(n)ext for outer loop.")
+    print("(r)un to skip to end.")
+
+def insertionInner(alg, alist, i, j, code, timer):
+    if alist[j-1] > alist[j]:
+        temp = alist[j]
+        alist[j] = alist[j-1]
+        alist[j-1] = temp
+        j -= 1
+        code = 1
+    else:
+        code = 2
+    if j == 0:
+        code = 2
+    
+    global state
+    state['alist'] = alist
+    state['j'] = j
+    state['code'] = code
+    state['timer'] += 1
+
+def insertionOuter(alg, alist, i, j, code, timer):
+    i += 1
+    j = i
+
+    global state
+    state['i'] = i
+    state['j'] = j
+    if i == len(alist):
+        state['code'] = 0
+    else:
+        state['code'] = 1
+
+def insertionEnd(alg, alist, i, j, code, timer):
+    print(bannerText("FINISHED", '#'))
+    print("...after",timer,"comparisons")
+    print(prettyList(alist,['c']*len(alist)))
+    global state
+    state = {}
+
+def insertionDisplay(alg, alist, i, j, code, timer):
+    coloursList = ['c']*i + [None]*(len(alist)-i)
+    if j != i:
+        coloursList[i] = 'c'
+    if j >= 0 and j < len(alist):
+        if code == 2:
+            coloursList[j] = 'g'
+        elif code == 1:
+            coloursList[j] = 'y'
+
+    print(prettyList(alist, coloursList))
 
 # Bubble Sort
 
@@ -136,22 +206,27 @@ def isPositiveInteger(n):
 
 init = {
     'sel': selectionInit,
+    'ins': insertionInit,
 }
 
 step = {
     'sel': selectionInner,
+    'ins': insertionInner,
 }
 
 next = {
     'sel': selectionOuter,
+    'ins': insertionOuter,
 }
 
 end = {
     'sel': selectionEnd,
+    'ins': insertionEnd,
 }
 
 display = {
     'sel': selectionDisplay,
+    'ins': insertionDisplay,
 }
 
 datafuncs = {
@@ -189,12 +264,13 @@ while True:
 #
 
     if cmd == "h" or cmd == "help":
-        print(bannerText(" HELP ",'#'))
+        print(bannerText("HELP",'#'))
         print("\t(h)elp: displays this message.")
         print("\t(r)un ALG: run the specified sorting algorithm. Only the first three characters of ALG need to be specified.")
         print("\t\tIf an algorithm is already running, skips to the end of that algorithm and shows the result.")
         print("\t\tCurrently supported algorithms are:")
         print("\t\t - Selection Sort")
+        print("\t\t - Insertion Sort")
         print()
         print("\t(s)tep: move to the next step of the inner loop.")
         print("\t(n)ext: move to the next step of the outer loop, stepping over the inner loop.")
@@ -229,6 +305,7 @@ while True:
                 print(errorText("Algorithm not found."))
                 continue
             init[args[0][:3]](datafunc(datafuncargs))
+            display[state['alg']](**state)
 
 #
 #   (s)tep
@@ -308,7 +385,7 @@ while True:
     elif cmd == "q" or cmd == "quit":
         if 'alg' in state:
             state = {}
-            print(bannerText(" ALGORITHM ABORTED ", '#'))
+            print(bannerText("ALGORITHM ABORTED", '#'))
         else:
             exit()
 

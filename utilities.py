@@ -41,5 +41,5 @@ def errorText(astring):
 
 def bannerText(astring, achar):
     _, columns = subprocess.check_output(['stty', 'size']).split()
-    out = '{s:{c}^{n}}'.format(s=astring,n=int(columns),c=achar)
+    out = '{s:{c}^{n}}'.format(s=" "+astring+" ",n=int(columns),c=achar)
     return out
