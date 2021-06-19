@@ -1,4 +1,7 @@
 # globals
+from abc import abstractclassmethod
+
+
 ANSIcolours = {
     "r": "\u001b[31m",
     "g": "\u001b[32m",
@@ -31,4 +34,8 @@ def prettyList(alist, colourslist):
         out += ', '
     out = out[:-2]
     out += "]"
+    return out
+
+def errorText(astring):
+    out = ANSIcolours['r'] + "!!! " + astring + " !!!" + ANSIcolours['reset']
     return out
