@@ -13,4 +13,18 @@ def insertionSort(alist):
         i += 1
     return alist
 
-print(insertionSort([10,5,37,1,6]))
+from random import shuffle
+
+def bogoSort(alist):
+    while True:
+        i = 0
+        while i < len(alist)-1:
+            if alist[i] > alist[i+1]:
+                break
+            i += 1
+        else:
+            break
+        shuffle(alist)
+    return alist
+
+

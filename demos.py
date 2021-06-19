@@ -158,7 +158,113 @@ def insertionDisplay(alg, alist, i, j, code, timer):
 
 # Bogo Sort
 
+def bogoInit(alist):
+    print(bannerText('BOGOSORT', '#'))
+    print("Performing bogosort on list:")
+    print(prettyList(alist, []))
+    if len(alist) == 1:
+        code = 0
+    else:
+        code = 1
+    global state
+    state = {
+        "alg": "bog",
+        "alist": alist,
+        "i": 0,
+        "code": code,
+        "timer": 0,
+    }
+    print("(s)tep for inner loop.")
+    print("(n)ext for outer loop.")
+    print("(r)un to skip to end.")
+
+def bogoInner(alg, alist, i, code, timer):
+    if alist[i] > alist[i+1]:
+        code = 2
+    else:
+        if i+1 == len(alist)-1:
+            code = 0
+        else:
+            code = 1
+    i+=1
+    
+    global state
+    state['i'] = i
+    state['code'] = code
+    state['timer'] += 1
+
+def bogoOuter(alg, alist, i, code, timer):
+    shuffle(alist)
+    i = 0
+
+    global state
+    state['alist'] = alist
+    state['i'] = i
+    state['code'] = 1
+
+def bogoEnd(alg, alist, i, code, timer):
+    print(bannerText("FINISHED", '#'))
+    print("...after",timer,"comparisons")
+    print(prettyList(alist,['c']*len(alist)))
+    global state
+    state = {}
+
+def bogoDisplay(alg, alist, i, code, timer):
+    coloursList = ['c']*i + [None]*(len(alist)-i)
+    if code == 2:
+        coloursList[i-1] = 'r'
+        coloursList[i] = 'r'
+    elif code == 1 and i > 0:
+        coloursList[i-1] = 'g'
+        coloursList[i] = 'g'
+
+    print(prettyList(alist, coloursList))
+
 # Monkey Sort
+
+def monkeyInit(alist):
+    print(bannerText('MONKEYSORT', '#'))
+    print("The monkey is sorting the list:")
+    print(prettyList(alist, []))
+    if len(alist) == 1:
+        code = 0
+    else:
+        code = 1
+    global state
+    state = {
+        "alg": "mon",
+        "alist": alist,
+        "i": 0,
+        "code": code,
+        "timer": 0,
+    }
+    print("(s)tep for inner loop.")
+    print("(n)ext for outer loop.")
+    print("(r)un to skip to end.")
+
+def monkeyEnd(alg, alist, i, code, timer):
+    print(bannerText("FINISHED", '#'))
+    print("...after",timer,"comparisons")
+    print(prettyList(alist,['y']*len(alist)))
+    print("The monkey has won a", colourString('banana', 'y'))
+    print(":D")
+    print("^ happy monkey")
+    global state
+    state = {}
+
+def monkeyDisplay(alg, alist, i, code, timer):
+    coloursList = ['y']*i + [None]*(len(alist)-i)
+    msg = ""
+    if code == 2:
+        coloursList[i-1] = 'r'
+        coloursList[i] = 'r'
+        msg = "sad monkey :("
+    elif code == 1 and i > 0:
+        coloursList[i-1] = 'g'
+        coloursList[i] = 'g'
+        msg = "happy monkey :)"
+
+    print(prettyList(alist, coloursList), msg)
 
 # Quick Sort
 
@@ -207,26 +313,36 @@ def isPositiveInteger(n):
 init = {
     'sel': selectionInit,
     'ins': insertionInit,
+    'bog': bogoInit,
+    'mon': monkeyInit,
 }
 
 step = {
     'sel': selectionInner,
     'ins': insertionInner,
+    'bog': bogoInner,
+    'mon': bogoInner,
 }
 
 next = {
     'sel': selectionOuter,
     'ins': insertionOuter,
+    'bog': bogoOuter,
+    'mon': bogoOuter,
 }
 
 end = {
     'sel': selectionEnd,
     'ins': insertionEnd,
+    'bog': bogoEnd,
+    'mon': monkeyEnd,
 }
 
 display = {
     'sel': selectionDisplay,
     'ins': insertionDisplay,
+    'bog': bogoDisplay,
+    'mon': monkeyDisplay,
 }
 
 datafuncs = {
@@ -271,6 +387,7 @@ while True:
         print("\t\tCurrently supported algorithms are:")
         print("\t\t - Selection Sort")
         print("\t\t - Insertion Sort")
+        print("\t\t - Bogo Sort / Monkey Sort")
         print()
         print("\t(s)tep: move to the next step of the inner loop.")
         print("\t(n)ext: move to the next step of the outer loop, stepping over the inner loop.")
