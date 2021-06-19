@@ -10,23 +10,7 @@ from random import shuffle, randint
 # Inner, Outer and End should always be run with **state as their arguments
 # Display should take the current state and print a coloured representation of it to the terminal
 
-def selectionSort(alist):
-    for i in range(len(alist)):
-        j = i
-        for k in range(i, len(alist)):
-            if alist[k] < alist[j]:
-                j = k
-
-        coloursList = ['c']*i + [None]*(len(alist)-i)
-        coloursList[i] = 'r'
-        coloursList[j] = 'g'
-
-        print(prettyList(alist, coloursList))
-
-        temp = alist[j]
-        alist[j] = alist[i]
-        alist[i] = temp
-    return alist
+# Selection Sort
 
 def selectionInit(alist):
     print(bannerText(' SELECTION SORT ', '#'))
@@ -98,6 +82,25 @@ def selectionDisplay(alg, alist, i, j, k, code, timer):
 
     print(prettyList(alist, coloursList))
 
+# Insertion Sort
+
+# Bubble Sort
+
+# Bogo Sort
+
+# Monkey Sort
+
+# Quick Sort
+
+# Merge Sort
+
+# Bucket Sort
+
+# Radix Sort
+
+# Heap Sort
+
+
 # data functions
 
 def dataShuffle(n):
@@ -119,6 +122,10 @@ def dataReverse(n):
 
 def dataLit(alist):
     return alist[:]
+
+def dataNand(n):
+    out = [randint(1,10) for i in range(n)]
+    return out
 
 # validation/conversion functions
 
@@ -152,7 +159,8 @@ datafuncs = {
     'rand': [dataRand, isPositiveInteger, int],
     'order': [dataOrder, isPositiveInteger, int],
     'reverse': [dataReverse, isPositiveInteger, int],
-    'lit': [dataLit, lambda *n: all(isPositiveInteger(i) for i in n), lambda *n: [int(i) for i in n]]
+    'lit': [dataLit, lambda *n: all(isPositiveInteger(i) for i in n), lambda *n: [int(i) for i in n]],
+    'nand': [dataNand, isPositiveInteger, int],
 }
 
 prevcmd = ""
@@ -194,6 +202,7 @@ while True:
         print()
         print("\t(d)ata: specify the data to be passed to the next algorithm.")
         print("\t\trand N: a list of N random numbers, between 1 and 100.")
+        print("\t\tnand N: a list of N random numbers, between 1 and 10.")
         print("\t\tshuffle N: the numbers 1-N in a random order.")
         print("\t\torder N: the numbers 1-N in order.")
         print("\t\treverse N: the numbers 1-N in reverse order.")
